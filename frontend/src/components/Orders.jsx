@@ -202,11 +202,11 @@ const Orders = () => {
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => setViewOrder(order)} className="p-2 text-white/50 hover:text-white/80 transition-colors rounded-lg hover:bg-white/20" title="View Details">
+                        <button onClick={() => setViewOrder(order)} className="p-2 text-white/60 hover:text-cyan-400 transition-colors rounded-lg hover:bg-white/5" title="View Details">
                           <FiEye size={18} />
                         </button>
-                        <button onClick={() => handleDeleteOrder(order.id)} className="p-2 text-white/50 hover:text-pink-500 transition-colors rounded-lg hover:bg-white/20" title="Cancel Order">
-                          <FiTrash2 size={18} />
+                        <button onClick={() => updateOrderStatus(order.id, 'Delivered')} className="p-2 text-white/60 hover:text-blue-600 transition-colors rounded-lg hover:bg-white/5" title="Mark Delivered">
+                          <FiCheckCircle size={18} />
                         </button>
                       </div>
                     </td>
@@ -345,60 +345,97 @@ const Orders = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={e => e.stopPropagation()}
-              className="w-full max-w-lg glass-card p-8 rounded-[2rem] shadow-2xl relative border border-white/40 text-white"
+              className="w-full max-w-2xl drop-shadow-[0_0_35px_rgba(236,72,153,0.8)] relative"
             >
-              <button onClick={() => setViewOrder(null)} className="absolute top-6 right-6 text-pink-500 hover:text-white hover:bg-red-500/80 p-1.5 rounded-full transition-colors bg-white/20 backdrop-blur-sm shadow-sm">
-                <FiX size={20} />
-              </button>
-              
-              <div className="flex items-center gap-5 border-b border-white/10 pb-5 mb-5">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-500 to-cyan-500 flex items-center justify-center shadow-lg text-white">
-                  <FiEye size={32} />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-black leading-none mb-1 text-white">Order Summary</h2>
-                  <p className="text-sm font-bold text-white/80 uppercase tracking-widest">#ORD-{viewOrder.id.toString().padStart(4, '0')}</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
-                <div>
-                  <h4 className="text-xs uppercase text-white/80 font-black mb-2 tracking-wider">Customer Info</h4>
-                  <div className="bg-white/5 rounded-xl p-4 shadow-sm border border-white/10">
-                    <p className="font-extrabold text-lg text-white">{viewOrder.customer.full_name}</p>
-                    <p className="font-bold text-white/80 text-sm">{viewOrder.customer.email}</p>
-                    <p className="font-bold text-white/80 text-sm">{viewOrder.customer.phone_number}</p>
+              <div 
+                className="bg-gradient-to-br from-pink-400 via-pink-400 to-cyan-400 p-1 relative overflow-hidden"
+                style={{ clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)' }}
+              >
+                <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white to-transparent opacity-50 rotate-45 pointer-events-none animate-[pulse_3s_infinite]"></div>
+                
+                <div 
+                   className="bg-gradient-to-br from-pink-400 via-pink-300 to-cyan-300 p-8 h-full w-full flex flex-col relative z-10 text-[#0f172a]"
+                   style={{ clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)' }}
+                >
+                  <button onClick={() => setViewOrder(null)} className="absolute top-6 right-6 text-red-600 hover:text-white hover:bg-red-500/80 p-2 rounded-full transition-colors bg-white/30 backdrop-blur-sm shadow-sm cursor-pointer z-20">
+                    <FiX size={20} />
+                  </button>
+                  
+                  <div className="flex items-center gap-5 border-b border-[#0f172a]/20 pb-5 mb-5">
+                    <div className="w-16 h-16 rounded-2xl bg-white/40 flex items-center justify-center shadow-sm text-[#0f172a] border-2 border-white/60">
+                      <FiEye size={32} />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-black leading-none mb-1 text-[#0f172a]">Order Details</h2>
+                      <p className="text-sm font-bold text-[#0f172a]/80 uppercase tracking-widest">#ORD-{viewOrder.id.toString().padStart(4, '0')}</p>
+                    </div>
                   </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xs uppercase text-white/80 font-black mb-2 tracking-wider">Order Items</h4>
-                  <div className="space-y-2">
-                    {viewOrder.items.map(item => (
-                      <div key={item.id} className="flex justify-between items-center bg-white/5 rounded-xl p-3 border border-white/10 hover:bg-white/10 transition-colors shadow-sm">
-                        <div className="flex gap-3 items-center">
-                          <span className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-xs font-black text-white">
-                            x{item.quantity}
-                          </span>
-                          <div>
-                            <p className="font-bold text-sm text-white">{item.product.name}</p>
-                            <p className="text-xs font-bold text-white/80">{item.product.sku}</p>
-                          </div>
+                  
+                  <div className="space-y-6 max-h-[50vh] overflow-y-auto pr-2 pb-4">
+                    <div>
+                      <h4 className="text-sm uppercase text-[#0f172a]/70 font-black mb-2 tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#0f172a]/50"></span> Customer Profile
+                      </h4>
+                      <div className="bg-white/30 rounded-xl p-5 shadow-sm border border-white/50 backdrop-blur-sm flex flex-col gap-2">
+                        <div className="flex justify-between items-center border-b border-[#0f172a]/10 pb-2">
+                          <span className="font-bold text-[#0f172a]/60 uppercase text-xs">Customer ID</span>
+                          <span className="font-black text-[#0f172a]">CUST-{viewOrder.customer.id.toString().padStart(4, '0')}</span>
                         </div>
-                        <p className="font-black text-white">${(item.unit_price * item.quantity).toFixed(2)}</p>
+                        <div className="flex justify-between items-center border-b border-[#0f172a]/10 pb-2">
+                          <span className="font-bold text-[#0f172a]/60 uppercase text-xs">Full Name</span>
+                          <span className="font-black text-[#0f172a] text-lg">{viewOrder.customer.full_name}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#0f172a]/10 pb-2">
+                          <span className="font-bold text-[#0f172a]/60 uppercase text-xs">Email Address</span>
+                          <span className="font-bold text-[#0f172a]">{viewOrder.customer.email}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#0f172a]/10 pb-2">
+                          <span className="font-bold text-[#0f172a]/60 uppercase text-xs">Phone Number</span>
+                          <span className="font-bold text-[#0f172a]">{viewOrder.customer.phone_number}</span>
+                        </div>
+                        <div className="flex justify-between items-center pb-1">
+                          <span className="font-bold text-[#0f172a]/60 uppercase text-xs">Member Since</span>
+                          <span className="font-bold text-[#0f172a]">{new Date(viewOrder.customer.created_at).toLocaleDateString()}</span>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                <div className="border-t border-white/10 pt-4 flex justify-between items-end">
-                  <div>
-                    <p className="text-xs uppercase font-black text-white/80">Total Amount</p>
-                    <p className="text-xs font-bold text-white/60 mt-1">{new Date(viewOrder.created_at).toLocaleString()}</p>
+                    <div>
+                      <h4 className="text-sm uppercase text-[#0f172a]/70 font-black mb-2 tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#0f172a]/50"></span> Purchased Items
+                      </h4>
+                      <div className="space-y-3">
+                        {viewOrder.items.map(item => (
+                          <div key={item.id} className="flex justify-between items-center bg-white/30 rounded-xl p-4 border border-white/50 shadow-sm">
+                            <div className="flex gap-4 items-center">
+                              <span className="w-10 h-10 rounded-lg bg-[#0f172a] flex items-center justify-center text-sm font-black text-white shadow-md border-2 border-white/30">
+                                x{item.quantity}
+                              </span>
+                              <div>
+                                <p className="font-black text-lg text-[#0f172a] leading-tight mb-0.5">{item.product.name}</p>
+                                <p className="text-xs font-bold text-[#0f172a]/70 font-mono tracking-widest">{item.product.sku} • ${(item.unit_price).toFixed(2)}/each</p>
+                              </div>
+                            </div>
+                            <p className="font-black text-xl text-[#0f172a] bg-white/40 px-3 py-1 rounded-lg border border-white/50">${(item.unit_price * item.quantity).toFixed(2)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="border-t-2 border-[#0f172a]/20 pt-6 flex justify-between items-end mt-4">
+                      <div>
+                        <p className="text-sm uppercase font-black text-[#0f172a]/70 tracking-widest">Order Summary</p>
+                        <p className="text-xs font-bold text-[#0f172a]/50 mt-1 uppercase tracking-wider">{new Date(viewOrder.created_at).toLocaleString()}</p>
+                        <p className="text-sm font-black text-[#0f172a] mt-1 bg-white/30 px-3 py-1 inline-block rounded-full border border-white/40">Status: {viewOrder.status}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs font-bold text-[#0f172a]/60 uppercase tracking-widest mb-1">Total Amount Paid</p>
+                        <h3 className="text-4xl font-black text-[#0f172a] drop-shadow-sm bg-white/30 px-4 py-2 rounded-xl border border-white/40">
+                          ${viewOrder.total_amount.toFixed(2)}
+                        </h3>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-3xl font-black text-white">
-                    ${viewOrder.total_amount.toFixed(2)}
-                  </h3>
                 </div>
               </div>
             </motion.div>
