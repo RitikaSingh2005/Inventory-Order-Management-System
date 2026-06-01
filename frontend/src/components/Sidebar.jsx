@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const [profileImage, setProfileImage] = useState(() => localStorage.getItem('adminProfileImage') || null);
 
@@ -148,9 +148,6 @@ const Sidebar = () => {
                     </p>
                   </div>
                   
-                  <button onClick={logout} className="flex items-center justify-center gap-2 text-sm font-bold text-[#0f172a] hover:bg-white/30 p-2.5 rounded-lg transition-colors w-full mb-2">
-                    <FiLogOut size={18} className="text-[#0f172a]" /> Logout
-                  </button>
                 </div>
               </div>
             </motion.div>
