@@ -32,7 +32,11 @@ const Login = () => {
       login(response.data);
       navigate('/');
     } catch (err) {
-      setLoginError('Invalid login credentials');
+      if (!err.response) {
+        setLoginError(`Network Error: Cannot connect to ${api.defaults.baseURL}`);
+      } else {
+        setLoginError('Invalid login credentials');
+      }
     }
   };
 
@@ -51,7 +55,11 @@ const Login = () => {
       setRegEmail('');
       setRegPassword('');
     } catch (err) {
-      setRegError(err.response?.data?.detail || 'Registration failed');
+      if (!err.response) {
+        setRegError(`Network Error: Cannot connect to ${api.defaults.baseURL}`);
+      } else {
+        setRegError(err.response?.data?.detail || 'Registration failed');
+      }
     }
   };
 
