@@ -6,7 +6,6 @@ import Dashboard from './components/Dashboard';
 import Products from './components/Products';
 import Customers from './components/Customers';
 import Orders from './components/Orders';
-import Login from './components/Login';
 import Splash from './components/Splash';
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -24,7 +23,7 @@ function App() {
 
   const handleSplashComplete = () => {
     setShowSplash(false);
-    navigate('/login');
+    navigate('/');
   };
 
   if (showSplash) {
@@ -38,7 +37,6 @@ function App() {
       }} />
       
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route path="/*" element={
           <ProtectedRoute>
             <div className="flex h-screen bg-[#020617] overflow-hidden text-primary relative p-4 md:p-6 lg:p-8">
