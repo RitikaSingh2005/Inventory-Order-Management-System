@@ -202,11 +202,11 @@ const Orders = () => {
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button onClick={() => updateOrderStatus(order.id, 'Shipped')} className="p-2 text-white/60 hover:text-green-600 transition-colors rounded-lg hover:bg-white/5" title="Mark Shipped">
-                          <FiTruck size={18} />
+                        <button onClick={() => setViewOrder(order)} className="p-2 text-white/50 hover:text-white/80 transition-colors rounded-lg hover:bg-white/20" title="View Details">
+                          <FiEye size={18} />
                         </button>
-                        <button onClick={() => updateOrderStatus(order.id, 'Delivered')} className="p-2 text-white/60 hover:text-blue-600 transition-colors rounded-lg hover:bg-white/5" title="Mark Delivered">
-                          <FiCheckCircle size={18} />
+                        <button onClick={() => handleDeleteOrder(order.id)} className="p-2 text-white/50 hover:text-pink-500 transition-colors rounded-lg hover:bg-white/20" title="Cancel Order">
+                          <FiTrash2 size={18} />
                         </button>
                       </div>
                     </td>
